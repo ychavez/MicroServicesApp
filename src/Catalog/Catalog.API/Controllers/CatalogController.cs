@@ -33,10 +33,11 @@ namespace Catalog.API.Controllers
 
         }
         [HttpGet]
+        [Route("[action]/{category}")]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductByCategory(string category)
         {
-            var products = await repository.GetProducts();
+            var products = await repository.GetProductByCategory(category);
             return Ok(products);
 
         }
@@ -55,5 +56,29 @@ namespace Catalog.API.Controllers
             return Ok(product);
 
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
+        {
+             await repository.Create(product);
+            return CreatedAtRoute("GetProduct", new { id = product.Id });
+
+        }
+        [HttpPut]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Product>> UpdateProduct([FromBody] Product product)
+        {
+            return Ok(await repository.Update(product));
+
+        }
+        [HttpDelete("{id:length(24)}")]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Product>> DeleteProductById(string id)
+        {
+            return Ok(await repository.Delete(id));
+
+        }
+
     }
 }
