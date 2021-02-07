@@ -41,15 +41,15 @@ namespace Catalog.API.Controllers
             return Ok(products);
 
         }
-        [HttpGet]
+        [HttpGet("{id:length(24)}", Name = "GetProduct")]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         [ProducesResponseType( (int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<Product>> GetProductById(string Id)
+        public async Task<ActionResult<Product>> GetProductById(string id)
         {
-            var product = await repository.GetProduct(Id);
+            var product = await repository.GetProduct(id);
             if (product == null)
             {
-                logger.LogError($"Product with id: {Id}, not found.");
+                logger.LogError($"Product with id: {id}, not found.");
                 return NotFound();
             }
 
@@ -58,7 +58,7 @@ namespace Catalog.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
         {
              await repository.Create(product);

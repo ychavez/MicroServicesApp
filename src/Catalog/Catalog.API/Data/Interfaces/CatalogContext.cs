@@ -13,6 +13,7 @@ namespace Catalog.API.Data.Interfaces
         public CatalogContext(ICatalogDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
+            
             var database = client.GetDatabase(settings.DataBaseName);
 
             products = database.GetCollection<Product>(settings.CollectionName);
